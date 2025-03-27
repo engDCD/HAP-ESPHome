@@ -314,7 +314,31 @@ namespace esphome
       }
       #endif
 
+      void LockEntity::update_battery_level(float battery) {
+        if (this->battery_sensor != nullptr) {
+          ESP_LOGI("homekit.lock", "Bateria: %.1f%%", battery);
+          homekit_characteristic_notify(&this->battery_sensor, HOMEKIT_FLOAT(battery));
+        }
+      }
+      
+      void LockEntity::update_wifi_signal(float wifi) {
+        if (this->wifi_sensor != nullptr) {
+          ESP_LOGI("homekit.lock", "Wi-Fi: %.1f dBm", wifi);
+          homekit_characteristic_notify(&this->wifi_sensor, HOMEKIT_FLOAT(wifi));
+        }
+      }
+
       void LockEntity::setup() {
+        ESP_LOGI("homekit.lock", "Configurando Lock no HomeKit");
+        
+        if (this->battery_sensor) {
+          ESP_LOGI("homekit.lock", "Bateria configurada");
+        }
+        
+        if (this->wifi_sensor) {
+          ESP_LOGI("homekit.lock", "Wi-Fi configurado");
+        }
+
         hap_acc_cfg_t acc_cfg = {
             .model = strdup(accessory_info[MODEL]),
             .manufacturer = strdup(accessory_info[MANUFACTURER]),
