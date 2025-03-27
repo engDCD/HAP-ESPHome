@@ -339,6 +339,30 @@ namespace esphome
           ESP_LOGI("homekit.lock", "Wi-Fi configurado");
         }
 
+        // Adiciona característica de nível de bateria
+        auto battery_char = std::make_shared<hap::Characteristic>(
+            HAP_CHAR_BATTERY_LEVEL, // Característica de bateria no HomeKit
+            hap::PERM_PR,           // Apenas leitura
+            100);                   // Valor inicial (100% de bateria)
+        
+        battery_char->set_value([]() -> int {
+            return id(battery_level).state; // Obtém valor do sensor no YAML
+        });
+    
+        this->add_characteristic(battery_char); 
+    
+        // Adiciona característica de intensidade do sinal Wi-Fi
+        auto wifi_char = std::make_shared<hap::Characteristic>(
+            HAP_CHAR_SIGNAL_STRENGTH, // Característica de sinal Wi-Fi no HomeKit
+            hap::PERM_PR,             // Apenas leitura
+            -50);                     // Valor inicial (-50 dBm)
+    
+        wifi_char->set_value([]() -> int {
+            return id(wifi_signal).state; // Obtém valor do sensor no YAML
+        });
+    
+        this->add_characteristic(wifi_char); 
+
         hap_acc_cfg_t acc_cfg = {
             .model = strdup(accessory_info[MODEL]),
             .manufacturer = strdup(accessory_info[MANUFACTURER]),
