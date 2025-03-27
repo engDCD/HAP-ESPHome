@@ -52,11 +52,16 @@ namespace esphome
       static int lock_write(hap_write_data_t write_data[], int count, void* serv_priv, void* write_priv);
       static int acc_identify(hap_acc_t* ha);
 
+    protected:
+      sensor::Sensor *battery_sensor = nullptr;
+      sensor::Sensor *wifi_sensor = nullptr;
 
-      public:
+    public:
       LockEntity(lock::Lock* lockPtr);
       void setInfo(std::map<AInfo, const char*> info);
       void setup();
+      void update_battery_level(float battery);
+      void update_wifi_signal(float wifi);
       #ifdef USE_HOMEKEY
       void set_nfc_ctx(pn532::PN532* ctx);
       void set_hk_hw_finish(HKFinish color);
