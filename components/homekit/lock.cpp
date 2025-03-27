@@ -346,7 +346,7 @@ namespace esphome
             100);                   // Valor inicial (100% de bateria)
         
         battery_char->set_value([]() -> int {
-            return id(battery_level).state; // Obtém valor do sensor no YAML
+            return id(real_battery_level).state; // Obtém valor do sensor no YAML
         });
     
         this->add_characteristic(battery_char); 
@@ -358,7 +358,7 @@ namespace esphome
             -50);                     // Valor inicial (-50 dBm)
     
         wifi_char->set_value([]() -> int {
-            return id(wifi_signal).state; // Obtém valor do sensor no YAML
+            return id(wifi_strength).state; // Obtém valor do sensor no YAML
         });
     
         this->add_characteristic(wifi_char); 
